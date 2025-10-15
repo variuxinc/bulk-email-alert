@@ -16,7 +16,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Data extends AbstractHelper
 {
     public const BULK_EMAILS_SMTP_DISABLE = 'bulkemails/smtp/disable';
-    public const BULK_EMAILS_ENABLE = 'bulkemails/general/enabled';
 
     protected $bulkEmailLogsRepository;
 
@@ -86,8 +85,20 @@ class Data extends AbstractHelper
         }
         if ($message->getFrom()){
             $from = $message->getFrom();
-            $from->rewind();
-            $log->setSender($from->current()->getName() . ' <' . $from->current()->getEmail() . '>');
+            if (is_array($from)) {
+                $firstFrom = reset($from);
+                if ($firstFrom instanceof \Magento\Framework\Mail\Address) {
+                    $name = $firstFrom->getName();
+                    $email = $firstFrom->getEmail();
+                    $log->setSender(trim("$name <$email>"));
+                }
+            } else {
+                $from->rewind();
+                $current = $from->current();
+                if ($current instanceof \Magento\Framework\Mail\Address) {
+                    $log->setSender($current->getName() . ' <' . $current->getEmail() . '>');
+                }
+            }
         }
         $toArr = [];
         foreach ($message->getTo() as $toAddr) {
@@ -118,4 +129,3 @@ class Data extends AbstractHelper
 
     }
 }
-
