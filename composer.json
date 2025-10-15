@@ -2,6 +2,7 @@
     "name": "variux/module-emailnotification",
     "description": "Magento Admin Bulk Emails Alert",
     "type": "magento2-module",
+    "version": "2.0.0",
     "license": "GPL-3.0",
     "authors": [
         {
@@ -14,7 +15,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": "~8.0 || ~8.1 || ~8.2",
-        "mageplaza/module-smtp": "^4.7"
+        "mageplaza/module-smtp": ">=4.7.18"
     },
     "autoload": {
         "files": [

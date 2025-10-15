@@ -107,7 +107,6 @@ class Data extends AbstractHelper
         $log->setBcc(implode(',', $bccArr));
         $messageBody = quoted_printable_decode($message->getBodyText());
         $content     = htmlspecialchars($messageBody);
-//        $content = htmlspecialchars($message->getBodyText());
         $log->setContent($content);
         $log->setStatus($status);
         $this->bulkEmailLogsRepository->save($log);

@@ -45,7 +45,7 @@ Magento Admin Bulk Emails Alert
 
  - Email Sender (bulkemails/email_template/sender)
 
- - Email Recevice (bulkemails/email_template/recevice)
+ - Email Receiver (bulkemails/email_template/receiver)
 
  - Template (bulkemails/email_template/template)
 

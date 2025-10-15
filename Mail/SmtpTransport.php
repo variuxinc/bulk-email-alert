@@ -15,10 +15,16 @@ use Mageplaza\Smtp\Model\Log;
 use Mageplaza\Smtp\Model\LogFactory;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use Laminas\Mail\Message;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\TextPart;
+use Symfony\Component\Mime\Part\Multipart\MixedPart;
+use Zend_Exception;
 use Variux\EmailNotification\Helper\Config;
 use Variux\EmailNotification\Helper\Data AS BulkEmailsHelperData;
-use Zend\Mail\Message;
-use Zend_Exception;
 use Variux\EmailNotification\Model\Source\Status;
 
 class SmtpTransport
@@ -98,73 +104,152 @@ class SmtpTransport
      * @throws MailException
      * @throws Zend_Exception
      */
-    public function aroundSendMessage(
-        TransportInterface $subject,
-        Closure $proceed
-    ) {
+    public function aroundSendMessage(TransportInterface $subject, Closure $proceed)
+    {
         $this->_storeId = $this->registry->registry('mp_smtp_store_id');
-        $message        = $this->getMessage($subject);
+        if (!$this->resourceMail->isModuleEnable($this->_storeId)) {
+            $proceed();
 
-        if ($this->resourceMail->isModuleEnable($this->_storeId) && $message) {
-            if ($this->helper->versionCompare('2.2.8')) {
-                $message = Message::fromString($message->getRawMessage())->setEncoding('utf-8');
-            }
-
-            if (!$this->validateBlacklist($message)) {
-                $message   = $this->resourceMail->processMessage($message, $this->_storeId);
-                $transport = $this->resourceMail->getTransport($this->_storeId);
-                try {
-                    if ($this->helper->versionCompare('2.3.3')) {
-                        $message->getHeaders()->removeHeader("Content-Disposition");
-                    }
-                    if ($this->config->isEnabled()) {
-                        if (!$this->config->isDisabled() && !$this->resourceMail->isDeveloperMode($this->_storeId)) {
-                            $transport->send($message);
+            return;
+        }
+        $message = $this->getMessage($subject);
+        if (!$this->validateBlacklist($message)) {
+            try {
+                if (!$this->resourceMail->isDeveloperMode($this->_storeId)) {
+                    if ($this->helper->versionCompare('2.4.8')) {
+                        if (!$message instanceof Email) {
+                            $message = $this->convertToSymfonyEmail($message);
                         }
+
+                        $transport = $this->resourceMail->getSymfonyTransport($this->_storeId);
+                        $mailer    = new Mailer($transport);
+                        $mailer->send($message);
                     } else {
-                        if (!$this->resourceMail->isDeveloperMode($this->_storeId)) {
+                        if ($this->helper->versionCompare('2.2.8')) {
+                            $message = Message::fromString($message->getRawMessage())->setEncoding('utf-8');
+                        }
+                        $message = $this->resourceMail->processMessage($message, $this->_storeId);
+                        if ($this->helper->versionCompare('2.3.3')) {
+                            $message->getHeaders()->removeHeader("Content-Disposition");
+                        }
+
+                        $transport = $this->resourceMail->getTransport($this->_storeId);
+                        if ($this->config->isEnabled()) {
+                            if (!$this->config->isDisabled()) {
+                                $transport->send($message);
+                            }
+                        } else {
                             $transport->send($message);
                         }
-                    }
 
-                    if ($this->helper->versionCompare('2.2.8')) {
-                        $messageTmp = $this->getMessage($subject);
-                        if ($messageTmp && is_object($messageTmp)) {
-                            $body = $messageTmp->getBody();
-                            if (is_object($body) && $body->isMultiPart()) {
-                                $message->setBody($body->getPartContent("0"));
+
+                        if ($this->helper->versionCompare('2.2.8')) {
+                            $messageTmp = $this->getMessage($subject);
+                            if ($messageTmp && is_object($messageTmp)) {
+                                $body = $messageTmp->getBody();
+                                if (is_object($body) && $body->isMultiPart()) {
+                                    $message->setBody($body->getPartContent("0"));
+                                }
                             }
                         }
                     }
+                } 
 
-                    if (!$this->resourceMail->isDeveloperMode($this->_storeId)) {
-                        $this->emailLog($message);
+                $this->emailLog($message);
+                if ($this->config->isEnabled()) {
+                    if (!$this->config->isDisabled()) {
+                        $this->data->saveEmailLog($message);
+                    } else {
+                        $this->data->saveEmailLog($message, Status::STATUS_BLOCKED);
                     }
-
-                    if ($this->config->isEnabled()) {
-                        if ($this->config->isDisabled()) {
-                            $this->data->saveEmailLog($message, Status::STATUS_BLOCKED);
-                        } else {
-                            $this->data->saveEmailLog($message);
-                        }
-                    }
-                } catch (Exception $e) {
-                    $this->emailLog($message, false);
-                    if ($this->config->isEnabled()) {
-                        $this->data->saveEmailLog($message, false);
-                    }
-                    throw new MailException(new Phrase($e->getMessage()), $e);
                 }
-            }
-        } else {
-            if ($this->config->isEnabled() && !$this->config->isDisabled()) {
-                $proceed();
+            } catch (Exception $e) {
+                $this->emailLog($message, false);
+                if ($this->config->isEnabled()) {
+                    $this->data->saveEmailLog($message, false);
+                }
+                throw new MailException(new Phrase($e->getMessage()), $e);
             }
         }
     }
 
     /**
-     * @param $transport
+     * @param $laminasMessage
+     * @return Email
+     */
+    protected function convertToSymfonyEmail($laminasMessage)
+    {
+        $email = new Email();
+
+        $fromList = $laminasMessage->getFrom();
+        if (is_array($fromList) && count($fromList)) {
+            $from = $fromList[0];
+            $email->from(new Address($from->getEmail(), $from->getName()));
+        }
+
+        $to = $laminasMessage->getTo();
+        if (is_array($to)) {
+            foreach ($to as $toAddress) {
+                $email->to(new Address($toAddress->getEmail(), $toAddress->getName()));
+            }
+        }
+
+        $email->subject((string) $laminasMessage->getSubject());
+        $body = $laminasMessage->getBody();
+        if ($body instanceof TextPart) {
+            $mediaSubtype = $body->getMediaSubtype();
+            $content      = $body->getBody();
+
+            if ($mediaSubtype === 'html') {
+                $email->html($content);
+            } else {
+                $email->text($content);
+            }
+        } elseif ($body instanceof MixedPart) {
+            foreach ($body->getParts() as $part) {
+                if ($part instanceof TextPart) {
+                    $mediaSubtype = $part->getMediaSubtype();
+                    $content      = $part->getBody();
+
+                    if ($mediaSubtype === 'html') {
+                        $email->html($content);
+                    } else {
+                        $email->text($content);
+                    }
+                }
+                if ($part instanceof DataPart) {
+                    $email->addPart($part);
+                }
+            }
+        } else {
+            $email->text('No readable content.');
+        }
+
+        if ($laminasMessage->getCc()) {
+            foreach ($laminasMessage->getCc() as $ccAddress) {
+                $email->addCc(new Address($ccAddress->getEmail(), $ccAddress->getName()));
+            }
+        }
+
+        if ($laminasMessage->getBcc()) {
+            foreach ($laminasMessage->getBcc() as $bccAddress) {
+                $email->addBcc(new Address($bccAddress->getEmail(), $bccAddress->getName()));
+            }
+        }
+
+        if ($laminasMessage->getReplyTo()) {
+            foreach ($laminasMessage->getReplyTo() as $replyTo) {
+                $email->replyTo(new Address($replyTo->getEmail(), $replyTo->getName()));
+            }
+        }
+
+        return $email;
+    }
+
+    /**
+     * Get message
+     *
+     * @param TransportInterface $transport
      *
      * @return mixed|null
      */
@@ -247,7 +332,12 @@ class SmtpTransport
             /** @var Log $log */
             $log = $this->logFactory->create();
             try {
-                $log->saveLog($message, $status);
+                if ($this->helper->versionCompare('2.4.8')) {
+                    $log->saveLogSymfony($message, $status, $this->_storeId);
+                } else {
+                    $log->saveLog($message, $status, $this->_storeId);
+                }
+
                 if ($status) {
                     $this->saveLogIdForAbandonedCart($log);
                 }

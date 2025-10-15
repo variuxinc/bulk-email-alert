@@ -38,8 +38,14 @@ class Notification
     protected $typeList;
 
     /**
-     * Constructor
-     *
+     * @param Config $config
+     * @param Data $data
+     * @param Mail $mailHelper
+     * @param BulkEmailLogsRepository $bulkEmailLogsRepository
+     * @param BulkEmailLogs $bulkEmailLogs
+     * @param BulkEmailLogsFactory $bulkEmailLogsFactory
+     * @param Collection $collection
+     * @param TypeListInterface $typeList
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
@@ -66,9 +72,7 @@ class Notification
     }
 
     /**
-     * Execute the cron
-     *
-     * @return void
+     * @return $this
      */
     public function execute()
     {
@@ -85,9 +89,9 @@ class Notification
         }
 
         $sender = $this->config->getConfigValue('bulkemails/email_template/sender');
-        $recevice = $this->config->getConfigValue('bulkemails/email_template/recevice');
+        $receiver = $this->config->getConfigValue('bulkemails/email_template/receiver');
 
-        if(empty($sender) || empty($recevice)) {
+        if(empty($sender) || empty($receiver)) {
             return $this;
         }
 
@@ -108,8 +112,8 @@ class Notification
                 if (!empty($copyTo) && $this->config->getTemplateMethod() == 'bcc') {
                     $copyTo = $this->config->getTemplateMethodEmails();
                 }
-                $sender = ['email' => $sender, 'name' => 'Bulk Alret Email Sender'];
-                $to = ['email' => $recevice, 'name' => 'Bulk Alret Email Recevice'];
+                $sender = ['email' => $sender, 'name' => 'Bulk Alert Email Sender'];
+                $to = ['email' => $receiver, 'name' => 'Bulk Alert Email Receiver'];
                 $this->mailHelper->sendTemplateEmail(
                     $sender,
                     $to,
