@@ -107,10 +107,10 @@ class BulkNotification extends Command
             }
 
             $sender = $this->config->getConfigValue('bulkemails/email_template/sender');
-            $recevice = $this->config->getConfigValue('bulkemails/email_template/recevice');
+            $receiver = $this->config->getConfigValue('bulkemails/email_template/receiver');
 
-            if(empty($sender) || empty($recevice)) {
-                $output->writeln('<info>Missing Bulk emails sender or recevice configurable values. </info>');
+            if(empty($sender) || empty($receiver)) {
+                $output->writeln('<info>Missing Bulk emails sender or receiver configurable values. </info>');
                 return false;
             }
 
@@ -131,8 +131,8 @@ class BulkNotification extends Command
                     if (!empty($copyTo) && $this->config->getTemplateMethod() == 'bcc') {
                         $copyTo = $this->config->getTemplateMethodEmails();
                     }
-                    $sender = ['email' => $sender, 'name' => 'Bulk Alret Email Sender'];
-                    $to = ['email' => $recevice, 'name' => 'Bulk Alret Email Recevice'];
+                    $sender = ['email' => $sender, 'name' => 'Bulk Alert Email Sender'];
+                    $to = ['email' => $receiver, 'name' => 'Bulk Alert Email Receiver'];
 
                     $this->mailHelper->sendTemplateEmail(
                         $sender,

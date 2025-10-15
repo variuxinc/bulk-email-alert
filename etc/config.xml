@@ -9,7 +9,7 @@
 			</general>
 			<email_template>
 				<sender/>
-				<recevice/>
+				<receiver/>
 				<template/>
 				<copyto/>
 				<copyto_method/>
