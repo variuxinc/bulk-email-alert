@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="BulkNotification" xsi:type="object">Variux\EmailNotification\Console\Command\BulkNotification</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" type="Variux\EmailNotification\Model\BulkEmailLogsRepository"/>
+	<preference for="Variux\EmailNotification\Api\Data\BulkEmailLogsInterface" type="Variux\EmailNotification\Model\BulkEmailLogs"/>
+	<preference for="Variux\EmailNotification\Api\Data\BulkEmailLogsSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Variux\EmailNotification\Model\ResourceModel\BulkEmailLogs\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">variux_emailnotification_bulkemaillogs</argument>
+			<argument name="resourceModel" xsi:type="string">Variux\EmailNotification\Model\ResourceModel\BulkEmailLogs\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="variux_emailnotification_bulkemaillogs_listing_data_source" xsi:type="string">Variux\EmailNotification\Model\ResourceModel\BulkEmailLogs\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<type name="Magento\Framework\Mail\TransportInterface">
+		<plugin name="Variux_EmailNotification_Plugin_Magento_Framework_Mail_TransportInterface" type="Variux\EmailNotification\Plugin\Magento\Framework\Mail\TransportInterface" sortOrder="10" disabled="false"/>
+	</type>
+
+    <preference for="Variux\EmailNotification\Api\SentMailsRepositoryInterface" type="Variux\EmailNotification\Model\SentMailsRepository"/>
+    <preference for="Variux\EmailNotification\Api\Data\SentMailsInterface" type="Variux\EmailNotification\Model\SentMails"/>
+    <preference for="Variux\EmailNotification\Api\Data\SentMailsSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <virtualType name="Variux\EmailNotification\Model\ResourceModel\SentMails\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">variux_emailnotification_sentmails</argument>
+            <argument name="resourceModel" xsi:type="string">Variux\EmailNotification\Model\ResourceModel\SentMails\Collection</argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Email\Model\Mail\TransportInterfacePlugin"
+                type="Variux\EmailNotification\Mail\EmailTransport"/>
+    <preference for="Mageplaza\Smtp\Mail\Transport" type="Variux\EmailNotification\Mail\SmtpTransport"/>
+</config>

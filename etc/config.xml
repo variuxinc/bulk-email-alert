@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<bulkemails>
+			<general>
+				<enabled>0</enabled>
+				<max_sentemails>10</max_sentemails>
+				<duration_threshold>300</duration_threshold>
+			</general>
+			<email_template>
+				<sender/>
+				<recevice/>
+				<template/>
+				<copyto/>
+				<copyto_method/>
+			</email_template>
+            <smtp>
+                <disable>0</disable>
+            </smtp>
+		</bulkemails>
+	</default>
+</config>

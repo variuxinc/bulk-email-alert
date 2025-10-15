@@ -1,0 +1,192 @@
+<?xml version="1.0" ?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_listing_data_source</item>
+		</item>
+	</argument>
+	<settings>
+		<spinner>variux_emailnotification_bulkemaillogs_columns</spinner>
+		<deps>
+			<dep>variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_listing_data_source</dep>
+		</deps>
+		<buttons>
+			<button name="clear">
+				<url path="*/*/clear"/>
+				<class>primary</class>
+				<label translate="true">Clear Logs</label>
+			</button>
+            <button name="add">
+                <url path="*/*/resume"/>
+                <class>primary</class>
+                <label translate="true">Resume Emails</label>
+            </button>
+		</buttons>
+	</settings>
+	<dataSource name="variux_emailnotification_bulkemaillogs_listing_data_source" component="Magento_Ui/js/grid/provider">
+		<settings>
+			<storageConfig>
+				<param name="indexField" xsi:type="string">bulkemaillogs_id</param>
+			</storageConfig>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<aclResource>Variux_EmailNotification::BulkEmailLogs</aclResource>
+		<dataProvider name="variux_emailnotification_bulkemaillogs_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+			<settings>
+				<requestFieldName>id</requestFieldName>
+				<primaryFieldName>bulkemaillogs_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>true</sticky>
+		</settings>
+		<bookmark name="bookmarks"/>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<paging name="listing_paging"/>
+	</listingToolbar>
+	<columns name="variux_emailnotification_bulkemaillogs_columns">
+		<settings>
+			<editorConfig>
+				<param name="selectProvider" xsi:type="string">variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_columns.ids</param>
+				<param name="enabled" xsi:type="boolean">true</param>
+				<param name="indexField" xsi:type="string">bulkemaillogs_id</param>
+				<param name="clientConfig" xsi:type="array">
+					<item name="saveUrl" xsi:type="url" path="variux_emailnotification/BulkEmailLogs/inlineEdit"/>
+					<item name="validateBeforeSave" xsi:type="boolean">false</item>
+				</param>
+			</editorConfig>
+			<childDefaults>
+				<param name="fieldAction" xsi:type="array">
+					<item name="provider" xsi:type="string">variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_listing.variux_emailnotification_bulkemaillogs_columns_editor</item>
+					<item name="target" xsi:type="string">startEdit</item>
+					<item name="params" xsi:type="array">
+						<item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+						<item name="1" xsi:type="boolean">true</item>
+					</item>
+				</param>
+			</childDefaults>
+		</settings>
+		<selectionsColumn name="ids">
+			<settings>
+				<indexField>bulkemaillogs_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="bulkemaillogs_id">
+			<settings>
+				<filter>text</filter>
+				<sorting>asc</sorting>
+				<label translate="true">ID</label>
+			</settings>
+		</column>
+		<column name="subject">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">subject</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="sender">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">sender</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="recipient">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">recipient</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="cc">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">cc</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="bcc">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">bcc</label>
+				<editor>
+					<editorType>text</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+			</settings>
+		</column>
+		<column name="status" component="Variux_EmailNotification/js/grid/status">
+			<settings>
+				<filter>select</filter>
+				<label translate="true">status</label>
+				<editor>
+					<editorType>select</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+                <dataType>select</dataType>
+                <options class="Variux\EmailNotification\Model\Source\Status"/>
+			</settings>
+		</column>
+		<column name="created_at" component="Magento_Ui/js/grid/columns/date">
+			<settings>
+				<filter>dateRange</filter>
+				<label translate="true">created_at</label>
+				<editor>
+					<editorType>date</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+                <dataType>date</dataType>
+			</settings>
+		</column>
+		<column name="updated_at" component="Magento_Ui/js/grid/columns/date">
+			<settings>
+                <filter>dateRange</filter>
+				<label translate="true">updated_at</label>
+				<editor>
+					<editorType>date</editorType>
+					<validation>
+						<rule name="required-entry" xsi:type="boolean">false</rule>
+					</validation>
+				</editor>
+                <dataType>date</dataType>
+			</settings>
+		</column>
+        <actionsColumn name="actions" class="Variux\EmailNotification\Ui\Component\Listing\Column\BulkEmailLogsActions" component="Variux_EmailNotification/js/grid/view">
+            <settings>
+                <indexField>bulkemaillogs_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+            </settings>
+        </actionsColumn>
+	</columns>
+</listing>

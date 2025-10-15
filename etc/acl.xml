@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+		<resources>
+			<resource id="Magento_Backend::admin">
+				<resource id="Variux_EmailNotification::variux_emailnotification" title="variux emailnotification" sortOrder="10">
+					<resource id="Variux_EmailNotification::bulkEmailLogs_index" title="bulkEmailLogs index" sortOrder="10"/>
+					<resource id="Variux_EmailNotification::bulkEmailLogs_clear" title="bulkEmailLogs clear" sortOrder="10"/>
+					<resource id="Variux_EmailNotification::bulkEmailLogs_resume" title="bulkEmailLogs resume" sortOrder="10"/>
+				</resource>
+				<resource id="Variux_EmailNotification::BulkEmailLogs" title="BulkEmailLogs" sortOrder="10">
+					<resource id="Variux_EmailNotification::BulkEmailLogs_save" title="Save BulkEmailLogs" sortOrder="10"/>
+					<resource id="Variux_EmailNotification::BulkEmailLogs_delete" title="Delete BulkEmailLogs" sortOrder="20"/>
+					<resource id="Variux_EmailNotification::BulkEmailLogs_update" title="Update BulkEmailLogs" sortOrder="30"/>
+					<resource id="Variux_EmailNotification::BulkEmailLogs_view" title="View BulkEmailLogs" sortOrder="40"/>
+				</resource>
+                <resource id="Variux_EmailNotification::sentMails" title="sentMails" sortOrder="10">
+                    <resource id="Variux_EmailNotification::sentMails_save" title="Save sentMails" sortOrder="10"/>
+                    <resource id="Variux_EmailNotification::sentMails_delete" title="Delete sentMails" sortOrder="20"/>
+                    <resource id="Variux_EmailNotification::sentMails_update" title="Update sentMails" sortOrder="30"/>
+                    <resource id="Variux_EmailNotification::sentMails_view" title="View sentMails" sortOrder="40"/>
+                </resource>
+				<resource id="Magento_Backend::stores">
+					<resource id="Magento_Backend::stores_settings">
+						<resource id="Magento_Config::config">
+							<resource id="Variux_EmailNotification::config_variux_emailnotification" title="bulkemails"/>
+						</resource>
+					</resource>
+				</resource>
+			</resource>
+		</resources>
+	</acl>
+</config>

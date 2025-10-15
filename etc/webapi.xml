@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<route url="/V1/variux-emailnotification/bulkemaillogs" method="POST">
+		<service class="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Variux_EmailNotification::BulkEmailLogs_save"/>
+		</resources>
+	</route>
+	<route url="/V1/variux-emailnotification/bulkemaillogs/search" method="GET">
+		<service class="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" method="getList"/>
+		<resources>
+			<resource ref="Variux_EmailNotification::BulkEmailLogs_view"/>
+		</resources>
+	</route>
+	<route url="/V1/variux-emailnotification/bulkemaillogs/:bulkemaillogsId" method="GET">
+		<service class="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" method="get"/>
+		<resources>
+			<resource ref="Variux_EmailNotification::BulkEmailLogs_view"/>
+		</resources>
+	</route>
+	<route url="/V1/variux-emailnotification/bulkemaillogs/:bulkemaillogsId" method="PUT">
+		<service class="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" method="save"/>
+		<resources>
+			<resource ref="Variux_EmailNotification::BulkEmailLogs_update"/>
+		</resources>
+	</route>
+	<route url="/V1/variux-emailnotification/bulkemaillogs/:bulkemaillogsId" method="DELETE">
+		<service class="Variux\EmailNotification\Api\BulkEmailLogsRepositoryInterface" method="deleteById"/>
+		<resources>
+			<resource ref="Variux_EmailNotification::BulkEmailLogs_delete"/>
+		</resources>
+	</route>
+</routes>

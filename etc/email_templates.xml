@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+	<template id="bulkemails_email_template_template" label="Bulk Emails" file="bulk_emails.html" type="html" module="Variux_EmailNotification" area="frontend"/>
+    <template id="bulkemails_resend_email_template" label="Bulk Resend Emails" file="bulk_resend_email.html" type="html" module="Variux_EmailNotification" area="frontend"/>
+</config>

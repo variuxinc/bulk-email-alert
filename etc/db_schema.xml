@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="variux_emailnotification_bulkemaillogs" resource="default" engine="innodb" comment="variux_emailnotification_bulkemaillogs Table">
+		<column xsi:type="int" name="bulkemaillogs_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="bulkemaillogs_id"/>
+		</constraint>
+		<column name="subject" nullable="false" xsi:type="varchar" comment="Email Subject" length="255"/>
+		<column name="content" nullable="false" xsi:type="text" comment="Email Content"/>
+		<column name="sender" nullable="false" xsi:type="varchar" comment="Email Sender" length="255"/>
+		<column name="recipient" nullable="false" xsi:type="varchar" comment="Email Recipient" length="255"/>
+		<column name="cc" nullable="true" xsi:type="varchar" comment="Email Cc" length="255"/>
+		<column name="bcc" nullable="true" xsi:type="varchar" comment="Email Bcc" length="255"/>
+		<column name="status" nullable="false" xsi:type="smallint" comment="Status" identity="false"/>
+		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Created At" default="CURRENT_TIMESTAMP"/>
+		<column name="updated_at" nullable="false" xsi:type="timestamp" comment="Updated At" default="CURRENT_TIMESTAMP" on_update="true"/>
+	</table>
+</schema>

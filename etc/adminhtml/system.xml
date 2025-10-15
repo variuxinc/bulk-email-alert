@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="variux" translate="label" sortOrder="9999">
+			<label>Variux Extensions</label>
+		</tab>
+		<section id="bulkemails" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<label>Bulk Emails Notification</label>
+			<tab>variux</tab>
+			<resource>Variux_EmailNotification::config_variux_emailnotification</resource>
+			<group id="general" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Setting</label>
+				<field id="enabled" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enable</label>
+					<comment/>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="max_sentemails" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Max limit of sent emails</label>
+					<comment>Number to sent alert bulk emails. Leave it to set default value.</comment>
+                    <validate>validate-number validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+				</field>
+				<field id="duration_threshold" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Defined duration</label>
+					<comment>Time to sent alert bulk emails per seconds. Leave it to set default value.</comment>
+                    <validate>validate-number validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+				</field>
+			</group>
+			<group id="email_template" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Email Setting</label>
+<!--				<field id="sender" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">-->
+<!--					<label>Email Sender</label>-->
+<!--					<comment/>-->
+<!--					<source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>-->
+<!--				</field>-->
+<!--				<field id="recevice" type="select" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">-->
+<!--					<label>Email Recevice</label>-->
+<!--					<comment/>-->
+<!--					<source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>-->
+<!--				</field>-->
+                <field id="sender" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Email Sender</label>
+                    <comment/>
+                    <validate>validate-email</validate>
+                </field>
+                <field id="recevice" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Email Recevice</label>
+                    <validate>validate-email</validate>
+                    <comment/>
+                </field>
+				<field id="template" type="select" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Template</label>
+					<comment>Email template chosen based on theme fallback when &quot;Default&quot; option is selected.</comment>
+					<source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+				</field>
+				<field id="copyto" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Email Copy To</label>
+					<comment>Comma-separated.</comment>
+				</field>
+				<field id="copyto_method" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Email Copy Method</label>
+					<comment/>
+					<source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+				</field>
+			</group>
+            <group id="smtp" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mail Sending Settings</label>
+                <field id="disable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Disable Email Communications</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+		</section>
+	</system>
+</config>

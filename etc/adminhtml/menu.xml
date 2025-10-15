@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+        <add id="Variux_EmailNotification::bulkEmailLogs" title="Bulk Emails" module="Variux_EmailNotification" sortOrder="9999" resource="Magento_Backend::content" parent="Variux::top_level"/>
+		<add id="Variux_EmailNotification::bulkEmailLogs_index" title="Bulk Email Logs" module="Variux_EmailNotification" sortOrder="9999" resource="Variux_EmailNotification::bulkEmailLogs_index" parent="Variux_EmailNotification::bulkEmailLogs" action="variux_emailnotification/bulkEmailLogs/index"/>
+		<add id="Variux_EmailNotification::configuration" title="Configuration" module="Variux_EmailNotification" sortOrder="9999" resource="Magento_Backend::content" parent="Variux_EmailNotification::bulkEmailLogs" action="adminhtml/system_config/edit/section/bulkemails"/>
+	</menu>
+</config>

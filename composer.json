@@ -1,0 +1,27 @@
+{
+    "name": "variux/module-emailnotification",
+    "description": "Magento Admin Bulk Emails Alert",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Variux Inc",
+            "email": "sales@variux.com",
+            "homepage": "https://www.variux.com/",
+            "role": "Magento 2 plugin contributor"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "~8.0 || ~8.1 || ~8.2",
+        "mageplaza/module-smtp": "^4.7"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Variux\\EmailNotification\\": ""
+        }
+    }
+}
