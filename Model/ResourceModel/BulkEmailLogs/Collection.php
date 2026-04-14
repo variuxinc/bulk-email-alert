@@ -35,8 +35,23 @@ class Collection extends AbstractCollection
      */
     public function clearLog()
     {
-        $where = "status = 1";
-        $this->getConnection()->delete($this->getMainTable(), $where);
+        $this->getConnection()->delete($this->getMainTable());
+    }
+
+    /**
+     * Delete email logs older than specified days
+     *
+     * @param int $days
+     * @return int Number of deleted records
+     */
+    public function deleteOlderThan(int $days): int
+    {
+        $connection = $this->getConnection();
+        $threshold = date('Y-m-d H:i:s', strtotime("-{$days} days"));
+        return (int) $connection->delete(
+            $this->getMainTable(),
+            ['created_at < ?' => $threshold]
+        );
     }
 }
 

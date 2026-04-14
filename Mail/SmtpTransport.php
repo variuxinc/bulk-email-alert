@@ -13,7 +13,7 @@ use Mageplaza\Smtp\Helper\Data;
 use Mageplaza\Smtp\Mail\Rse\Mail;
 use Mageplaza\Smtp\Model\Log;
 use Mageplaza\Smtp\Model\LogFactory;
-use Psr\Log\LoggerInterface;
+use Variux\EmailNotification\Logger\Logger as EmailNotificationLogger;
 use ReflectionClass;
 use Laminas\Mail\Message;
 use Symfony\Component\Mime\Email;
@@ -56,7 +56,7 @@ class SmtpTransport
     protected $helper;
 
     /**
-     * @var LoggerInterface
+     * @var EmailNotificationLogger
      */
     protected $logger;
 
@@ -77,14 +77,14 @@ class SmtpTransport
      * @param LogFactory $logFactory
      * @param Registry $registry
      * @param Data $helper
-     * @param LoggerInterface $logger
+     * @param EmailNotificationLogger $logger
      */
     public function __construct(
         Mail $resourceMail,
         LogFactory $logFactory,
         Registry $registry,
         Data $helper,
-        LoggerInterface $logger,
+        EmailNotificationLogger $logger,
         Config $config,
         BulkEmailsHelperData $data
     ) {

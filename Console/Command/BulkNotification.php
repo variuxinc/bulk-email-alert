@@ -55,7 +55,7 @@ class BulkNotification extends Command
      * @param BulkEmailLogsFactory $bulkEmailLogsFactory
      * @param Collection $collection
      * @param TypeListInterface $typeList
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Variux\EmailNotification\Logger\Logger $logger
      */
     public function __construct(
         \Magento\Framework\App\State $state,
@@ -67,7 +67,7 @@ class BulkNotification extends Command
         BulkEmailLogsFactory $bulkEmailLogsFactory,
         Collection $collection,
         TypeListInterface $typeList,
-        \Psr\Log\LoggerInterface $logger
+        \Variux\EmailNotification\Logger\Logger $logger
     )
     {
         parent::__construct();

@@ -6,6 +6,7 @@
 				<enabled>0</enabled>
 				<max_sentemails>10</max_sentemails>
 				<duration_threshold>300</duration_threshold>
+				<log_retention_days>90</log_retention_days>
 			</general>
 			<email_template>
 				<sender/>
