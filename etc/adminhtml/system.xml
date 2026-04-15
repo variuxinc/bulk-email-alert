@@ -31,6 +31,14 @@
                         <field id="enabled">1</field>
                     </depends>
 				</field>
+				<field id="log_retention_days" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Log Retention Period (Days)</label>
+					<comment>Email logs older than this number of days will be automatically deleted. Default: 90 days (3 months).</comment>
+                    <validate>validate-number validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+				</field>
 			</group>
 			<group id="email_template" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 				<label>Email Setting</label>

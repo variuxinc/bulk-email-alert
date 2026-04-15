@@ -46,7 +46,7 @@ class Notification
      * @param BulkEmailLogsFactory $bulkEmailLogsFactory
      * @param Collection $collection
      * @param TypeListInterface $typeList
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Variux\EmailNotification\Logger\Logger $logger
      */
     public function __construct(
         Config $config,
@@ -57,7 +57,7 @@ class Notification
         BulkEmailLogsFactory $bulkEmailLogsFactory,
         Collection $collection,
         TypeListInterface $typeList,
-        \Psr\Log\LoggerInterface $logger
+        \Variux\EmailNotification\Logger\Logger $logger
     )
     {
         $this->config = $config;

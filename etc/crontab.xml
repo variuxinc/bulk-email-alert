@@ -4,5 +4,8 @@
 		<job name="variux_bulkemailsnotification" instance="Variux\EmailNotification\Cron\Notification" method="execute">
 			<schedule>* * * * *</schedule>
 		</job>
+		<job name="variux_bulkemails_cleanup_logs" instance="Variux\EmailNotification\Cron\CleanupLogs" method="execute">
+			<schedule>0 2 * * *</schedule>
+		</job>
 	</group>
 </config>

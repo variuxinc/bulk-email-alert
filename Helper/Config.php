@@ -93,6 +93,16 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Get log retention period in days
+     *
+     * @return int
+     */
+    public function getLogRetentionDays(): int
+    {
+        return (int) $this->getConfigValue(self::BULK_EMAILS_CONFIG . "/log_retention_days", $this->getStore()->getStoreId());
+    }
+
+    /**
      * @return bool
      */
     public function getConfigValue($path, $storeId = null)

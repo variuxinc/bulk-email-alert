@@ -45,6 +45,30 @@
 		<bookmark name="bookmarks"/>
 		<columnsControls name="columns_controls"/>
 		<filters name="listing_filters"/>
+		<massaction name="listing_massaction">
+			<action name="delete">
+				<settings>
+					<confirm>
+						<message translate="true">Are you sure you want to delete selected email log(s)?</message>
+						<title translate="true">Delete items</title>
+					</confirm>
+					<url path="variux_emailnotification/bulkEmailLogs/massDelete"/>
+					<type>delete</type>
+					<label translate="true">Delete</label>
+				</settings>
+			</action>
+			<action name="resend">
+				<settings>
+					<confirm>
+						<message translate="true">Are you sure you want to resend selected email(s)?</message>
+						<title translate="true">Resend items</title>
+					</confirm>
+					<url path="variux_emailnotification/bulkEmailLogs/massResend"/>
+					<type>resend</type>
+					<label translate="true">Resend</label>
+				</settings>
+			</action>
+		</massaction>
 		<paging name="listing_paging"/>
 	</listingToolbar>
 	<columns name="variux_emailnotification_bulkemaillogs_columns">
