@@ -57,7 +57,7 @@ class CleanupLogs
         }
 
         $retentionDays = $this->config->getLogRetentionDays();
-        if ($retentionDays <= 0) {
+        if ($retentionDays < 0) {
             $retentionDays = self::DEFAULT_RETENTION_DAYS;
         }
 
