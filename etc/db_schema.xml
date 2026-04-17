@@ -14,5 +14,8 @@
 		<column name="status" nullable="false" xsi:type="smallint" comment="Status" identity="false"/>
 		<column name="created_at" nullable="false" xsi:type="timestamp" comment="Created At" default="CURRENT_TIMESTAMP"/>
 		<column name="updated_at" nullable="false" xsi:type="timestamp" comment="Updated At" default="CURRENT_TIMESTAMP" on_update="true"/>
+		<index referenceId="VARIUX_EMAILNOTIFICATION_BULKEMAILLOGS_CREATED_AT" indexType="btree">
+			<column name="created_at"/>
+		</index>
 	</table>
 </schema>
