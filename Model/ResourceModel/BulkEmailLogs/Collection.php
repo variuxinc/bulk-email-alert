@@ -39,19 +39,35 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * Delete email logs older than specified days
+     * Delete email logs older than specified days in batches using LIMIT
+     *
+     * Leverages the created_at index and stops naturally when fewer rows than
+     * the batch size are affected, avoiding an extra MAX(id) round-trip.
      *
      * @param int $days
+     * @param int $batchSize
      * @return int Number of deleted records
      */
-    public function deleteOlderThan(int $days): int
+    public function deleteOlderThan(int $days, int $batchSize = 1000): int
     {
         $connection = $this->getConnection();
+        $table = $this->getMainTable();
         $threshold = date('Y-m-d H:i:s', strtotime("-{$days} days"));
-        return (int) $connection->delete(
-            $this->getMainTable(),
-            ['created_at < ?' => $threshold]
+
+        $sql = sprintf(
+            'DELETE FROM %s WHERE %s < ? LIMIT %d',
+            $connection->quoteIdentifier($table),
+            $connection->quoteIdentifier('created_at'),
+            $batchSize
         );
+
+        $totalDeleted = 0;
+        do {
+            $deleted = (int) $connection->query($sql, [$threshold])->rowCount();
+            $totalDeleted += $deleted;
+        } while ($deleted === $batchSize);
+
+        return $totalDeleted;
     }
 }
 
