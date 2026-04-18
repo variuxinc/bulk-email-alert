@@ -36,6 +36,22 @@
 			</argument>
 		</arguments>
 	</type>
+	<!--
+		Capture the real EmailMessage at factory-create time, keyed by the
+		built transport instance. Necessary because Amasty SMTP's Transport
+		implements getMessage() to return an empty fallback object, which
+		would otherwise leave bulk email log rows with NULL subject/sender/
+		recipients and a bare "Date:" header as content.
+	-->
+	<type name="Magento\Framework\Mail\TransportInterfaceFactory">
+		<plugin name="Variux_EmailNotification_TransportFactoryCapture" type="Variux\EmailNotification\Plugin\Magento\Framework\Mail\TransportInterfaceFactoryPlugin" sortOrder="10" disabled="false"/>
+	</type>
+	<!--
+		Single provider-agnostic hook. Runs for every TransportInterface
+		implementation (Magento default, Mageplaza SMTP, Amasty SMTP, …)
+		so logging and the spam breaker behave identically regardless of
+		which SMTP provider is active.
+	-->
 	<type name="Magento\Framework\Mail\TransportInterface">
 		<plugin name="Variux_EmailNotification_Plugin_Magento_Framework_Mail_TransportInterface" type="Variux\EmailNotification\Plugin\Magento\Framework\Mail\TransportInterface" sortOrder="10" disabled="false"/>
 	</type>
@@ -49,7 +65,4 @@
             <argument name="resourceModel" xsi:type="string">Variux\EmailNotification\Model\ResourceModel\SentMails\Collection</argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Email\Model\Mail\TransportInterfacePlugin"
-                type="Variux\EmailNotification\Mail\EmailTransport"/>
-    <preference for="Mageplaza\Smtp\Mail\Transport" type="Variux\EmailNotification\Mail\SmtpTransport"/>
 </config>
